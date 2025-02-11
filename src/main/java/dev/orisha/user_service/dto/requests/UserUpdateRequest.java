@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Set;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,7 +20,7 @@ public class UserUpdateRequest extends UserDTO {
     private String firstName;
     private String lastName;
     private String password;
-    private Set<Authority> authorities;
+    private List<Authority> authorities;
     private @NotNull Authority authority;
 
 }

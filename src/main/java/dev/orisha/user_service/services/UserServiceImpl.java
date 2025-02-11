@@ -1,21 +1,17 @@
 package dev.orisha.user_service.services;
 
-import dev.orisha.user_service.data.mappers.UserMapper;
+import dev.orisha.user_service.mappers.UserMapper;
 import dev.orisha.user_service.data.models.User;
 import dev.orisha.user_service.data.repositories.UserRepository;
 import dev.orisha.user_service.dto.UserDTO;
 import dev.orisha.user_service.dto.requests.UserUpdateRequest;
 import dev.orisha.user_service.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-
-import static dev.orisha.user_service.config.constants.AppConstants.USER_AUTHORITY;
 
 @Service
 @Slf4j
@@ -23,33 +19,40 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ModelMapper modelMapper;
+    private final UserQueryService userQueryService;
 
     @Autowired
-    public UserServiceImpl(final UserRepository userRepository, final UserMapper userMapper) {
+    public UserServiceImpl(final UserRepository userRepository, final UserMapper userMapper,
+                           final ModelMapper modelMapper, final UserQueryService userQueryService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.modelMapper = modelMapper;
+        this.userQueryService = userQueryService;
     }
 
     @Override
-    @Secured(USER_AUTHORITY)
+//    @Secured(USER_AUTHORITY)
 //    @RolesAllowed({ADMIN_AUTHORITY})
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public UserDTO update(UserUpdateRequest request) {
-
-        return getUserDTOEagerly(request.getEmail())
-                .map(existingUser -> {
-                    log.info("Updating existing user: {}", existingUser);
-                    existingUser.getAuthorities().add(request.getAuthority());
-                    userMapper.partialUpdate(existingUser, request);
-                    return existingUser;
-                })
-                .map(userRepository::save)
-                .map(userMapper::toDto)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+//        User user = getUserEagerly(request.getEmail());
+//        CriteriaBuilder userCriteria = userRepository.cri
+return null;
+//        return getUserEagerly(request.getEmail())
+//                .map(existingUser -> {
+//                    log.info("Updating existing user: {}", existingUser);
+////                    existingUser.getAuthorities().add(request.getAuthority());
+//                    modelMapper.map(request, existingUser);
+//
+//                    return existingUser;
+//                })
+//                .map(userRepository::save)
+////                .map(userMapper::toDto);
     }
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public UserDTO getUserDTO(String email) {
         log.info("Trying to find user by email: {}", email);
 
@@ -61,7 +64,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsers() {
         log.info("Trying to fetch all users");
         List<User> users = userRepository.findAll();
-        return userMapper.toDtoList(users);
+        return userMapper.toDto(users);
 
 //        Page<User> usesrs = userRepository.findAll((root, query, cb) -> cb.equal(root.get("email"), "username"), PageRequest.of(1, 2));
 //        List<User> userss = userRepository.findAll((root, query, cb) -> {
@@ -72,9 +75,10 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private Optional<User> getUserDTOEagerly(String email) {
+    private User getUserEagerly(String email) {
         log.info("Trying to find user eagerly by email: {}", email);
-        return userRepository.findByEmailWithEagerRelationships(email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
 }

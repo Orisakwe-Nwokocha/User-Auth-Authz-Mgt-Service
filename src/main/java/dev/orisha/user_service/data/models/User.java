@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Set;
 
 import static jakarta.persistence.EnumType.STRING;
-import static java.time.LocalDateTime.now;
 
 @Getter
 @Setter
@@ -36,19 +37,12 @@ public class User {
     private Set<Authority> authorities;
 
     @Setter(AccessLevel.NONE)
-    private LocalDateTime dateRegistered;
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Instant dateRegistered;
 
     @Setter(AccessLevel.NONE)
-    private LocalDateTime dateUpdated;
+    @UpdateTimestamp
+    private Instant dateUpdated;
 
-
-    @PrePersist
-    private void setDateRegistered(){
-        dateRegistered = now();
-    }
-
-    @PreUpdate
-    private void setDateUpdated(){
-        dateUpdated = now();
-    }
 }

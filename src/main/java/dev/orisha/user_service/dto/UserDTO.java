@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,10 +28,12 @@ public class UserDTO {
     @JsonSerialize(using = CustomEmptyStringSerializer.class)
     private String password;
 
-    private Set<Authority> authorities;
+//    private Set<Authority> authorities;
 
-    private LocalDateTime dateRegistered;
+    private List<Authority> userAuthorities;
 
-    private LocalDateTime dateUpdated;
+    private Instant dateRegistered;
+
+    private Instant dateUpdated;
 
 }
