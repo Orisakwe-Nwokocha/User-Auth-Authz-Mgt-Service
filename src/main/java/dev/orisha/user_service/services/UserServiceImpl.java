@@ -1,15 +1,21 @@
 package dev.orisha.user_service.services;
 
-import dev.orisha.user_service.mappers.UserMapper;
 import dev.orisha.user_service.data.models.User;
+import dev.orisha.user_service.dto.PageData;
+import dev.orisha.user_service.exceptions.ResourceNotFoundException;
+import dev.orisha.user_service.factory.RequestFactory;
+import dev.orisha.user_service.mappers.UserMapper;
 import dev.orisha.user_service.data.repositories.UserRepository;
 import dev.orisha.user_service.dto.UserDTO;
 import dev.orisha.user_service.dto.requests.UserUpdateRequest;
 import dev.orisha.user_service.exceptions.UserNotFoundException;
+import dev.orisha.user_service.services.criteria.UserCriteria;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tech.jhipster.service.filter.StringFilter;
 
 import java.util.List;
 
@@ -19,52 +25,41 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final ModelMapper modelMapper;
     private final UserQueryService userQueryService;
 
     @Autowired
     public UserServiceImpl(final UserRepository userRepository, final UserMapper userMapper,
-                           final ModelMapper modelMapper, final UserQueryService userQueryService) {
+                           final UserQueryService userQueryService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.modelMapper = modelMapper;
         this.userQueryService = userQueryService;
     }
 
     @Override
-//    @Secured(USER_AUTHORITY)
-//    @RolesAllowed({ADMIN_AUTHORITY})
-//    @PreAuthorize("hasAuthority('ADMIN')")
-    public UserDTO update(UserUpdateRequest request) {
-//        User user = getUserEagerly(request.getEmail());
-//        CriteriaBuilder userCriteria = userRepository.cri
-return null;
-//        return getUserEagerly(request.getEmail())
-//                .map(existingUser -> {
-//                    log.info("Updating existing user: {}", existingUser);
-////                    existingUser.getAuthorities().add(request.getAuthority());
-//                    modelMapper.map(request, existingUser);
-//
-//                    return existingUser;
-//                })
-//                .map(userRepository::save)
-////                .map(userMapper::toDto);
+    public UserDTO getUser(final String email) {
+        log.info("Trying to find user by email: {}", email);
+        UserCriteria userCriteria = new UserCriteria();
+        StringFilter emailFilter = new StringFilter();
+        emailFilter.setEquals(email);
+        userCriteria.setEmail(emailFilter);
+
+        return userQueryService.findOneByCriteria(userCriteria)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: '%s'".formatted(email)));
     }
 
     @Override
-//    @Transactional(readOnly = true)
-    public UserDTO getUserDTO(String email) {
-        log.info("Trying to find user by email: {}", email);
-
-        return userRepository.findByEmail(email).map(userMapper::toDto)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: '%s'".formatted(email)));
+    public UserDTO updateUser(UserUpdateRequest request) {
+        UserDTO userDTO = getUser(request.getEmail());
+        User user = userMapper.toEntity(userDTO);
+        userMapper.partialUpdate(user, request);
+        user.getAuthorities().add(request.getAuthority());
+        return userMapper.toDto(userRepository.save(user));
     }
 
     @Override
     public List<UserDTO> getAllUsers() {
         log.info("Trying to fetch all users");
-        List<User> users = userRepository.findAll();
-        return userMapper.toDto(users);
+        return userQueryService.findByCriteria(null);
 
 //        Page<User> usesrs = userRepository.findAll((root, query, cb) -> cb.equal(root.get("email"), "username"), PageRequest.of(1, 2));
 //        List<User> userss = userRepository.findAll((root, query, cb) -> {
@@ -75,10 +70,16 @@ return null;
 
     }
 
-    private User getUserEagerly(String email) {
-        log.info("Trying to find user eagerly by email: {}", email);
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+    @Override
+    public PageData<UserDTO> getAllUsers(Pageable pageable) {
+        log.info("Fetching all users with pageable: {}", pageable);
+        Page<UserDTO> userDTOsPage = userQueryService.findByCriteria(null, pageable);
+        if (userDTOsPage != null) {
+            PageData<UserDTO> pageData = RequestFactory.createPageData(userDTOsPage);
+            log.info("Found users {}", pageData);
+            return pageData;
+        }
+        throw new ResourceNotFoundException("Users not found");
     }
 
 }

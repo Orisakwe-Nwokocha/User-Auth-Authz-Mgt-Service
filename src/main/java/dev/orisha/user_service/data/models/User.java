@@ -1,10 +1,13 @@
 package dev.orisha.user_service.data.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import dev.orisha.user_service.config.CustomEmptyStringSerializer;
 import dev.orisha.user_service.data.enums.Authority;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +20,7 @@ import static jakarta.persistence.EnumType.STRING;
 @Setter
 @Entity
 @Table(name = "users")
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +34,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
+    @JsonSerialize(using = CustomEmptyStringSerializer.class)
     private String password;
 
     @ElementCollection

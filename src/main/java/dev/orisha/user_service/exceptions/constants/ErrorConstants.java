@@ -1,4 +1,4 @@
-package dev.orisha.user_service.handlers.constants;
+package dev.orisha.user_service.exceptions.constants;
 
 public final class ErrorConstants {
 

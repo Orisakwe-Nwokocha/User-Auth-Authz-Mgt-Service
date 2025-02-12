@@ -11,9 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import static dev.orisha.user_service.handlers.constants.ErrorConstants.AUTHENTICATION_ERROR_MESSAGE;
+import static dev.orisha.user_service.exceptions.constants.ErrorConstants.AUTHENTICATION_ERROR_MESSAGE;
 
 @Component
 @Slf4j
@@ -30,7 +29,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();

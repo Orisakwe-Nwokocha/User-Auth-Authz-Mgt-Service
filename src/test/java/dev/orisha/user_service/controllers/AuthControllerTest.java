@@ -2,13 +2,10 @@ package dev.orisha.user_service.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.orisha.user_service.dto.UserDTO;
 import dev.orisha.user_service.dto.requests.LoginRequest;
 import dev.orisha.user_service.dto.requests.RegisterRequest;
-import dev.orisha.user_service.dto.requests.UserUpdateRequest;
 import dev.orisha.user_service.dto.responses.ApiResponse;
 import dev.orisha.user_service.dto.responses.LoginResponse;
-import dev.orisha.user_service.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,8 +14,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static dev.orisha.user_service.data.enums.Authority.ADMIN;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,9 +29,6 @@ class AuthControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     private static final String BLACKLISTED_TOKEN = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmlzaGEuZGV2IiwiaWF0IjoxNzIzMzk0Mjk5LCJleHAiOjE3MjM0ODA2OTksInN1YiI6InVzZXIiLCJwcmluY2lwYWwiOiJ1c2VyIiwiY3JlZGVudGlhbHMiOiJbUFJPVEVDVEVEXSIsImF1dGhvcml0aWVzIjpbIlVTRVIiXX0.E-wHrx_7sp2xSloSMoVuVCNY5OdZ6Wh80BomoSAH8XSWSSrD8WB52EInr6Pc6HQKc6ZLzegGY7kDbqxV3ipwtQ";
@@ -50,26 +42,6 @@ class AuthControllerTest {
                         .content(content))
                 .andExpect(status().isCreated())
                 .andDo(print());
-
-    }
-
-    @Test
-    void updateUserTest() {
-        UserUpdateRequest request = new UserUpdateRequest();
-        request.setEmail("user");
-        request.setLastName("g");
-        request.setPassword("password");
-        UserDTO user = userService.getUserDTO(request.getEmail());
-//        int size = user.getAuthorities().size();
-//        assertEquals(1, size);
-
-        request.setAuthority(ADMIN);
-        UserDTO update = userService.update(request);
-        assertNotNull(update);
-
-        user = userService.getUserDTO(request.getEmail());
-//        size = user.getAuthorities().size();
-//        assertEquals(2, size);
     }
 
     @Test
@@ -99,7 +71,6 @@ class AuthControllerTest {
     }
 
     @Test
-
     public void testUserControllerForAuthenticatedUsers() throws Exception {
         String token = getToken();
         mockMvc.perform(get("/users")

@@ -9,13 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
+import static dev.orisha.user_service.config.constants.AppConstants.USER_AUTHORITY;
 import static dev.orisha.user_service.controllers.constants.ApplicationUrls.*;
-import static dev.orisha.user_service.handlers.constants.ErrorConstants.ACCESS_DENIED;
+import static dev.orisha.user_service.exceptions.constants.ErrorConstants.ACCESS_DENIED;
 import static java.time.LocalDateTime.now;
 
 @RestController
@@ -36,7 +38,21 @@ public class UserController {
         return "Hello %s!".formatted(principal != null ? principal.getName() : "World");
     }
 
+    @GetMapping(GET_USER_BY_EMAIL_URL)
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email, Principal principal) {
+        if (email.equals(principal.getName())) {
+            log.info("REST request to get user: {}", principal.getName());
+            UserDTO userDTO = userService.getUser(email);
+            return buildApiResponse(userDTO);
+        }
+
+        throw new AccessDeniedException(ACCESS_DENIED);
+    }
+
     @PatchMapping(UPDATE_USER_URL)
+    @Secured(USER_AUTHORITY)
+//    @RolesAllowed({ADMIN_AUTHORITY})
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateRequest request, Principal principal) {
         log.info("REST request to update user with dto: {}", request);
         String user = request.getEmail();
@@ -46,20 +62,9 @@ public class UserController {
             throw new AccessDeniedException(ACCESS_DENIED);
         }
 
-        UserDTO updatedUser = userService.update(request);
+        UserDTO updatedUser = userService.updateUser(request);
         log.info("User updated: {}", updatedUser);
         return buildApiResponse(updatedUser);
-    }
-
-    @GetMapping(GET_USER_BY_EMAIL_URL)
-    public ResponseEntity<?> getUserByEmail(@RequestParam String email, Principal principal) {
-        if (email.equals(principal.getName())) {
-            log.info("REST request to get user: {}", principal.getName());
-            UserDTO userDTO = userService.getUserDTO(email);
-            return buildApiResponse(userDTO);
-        }
-
-        throw new AccessDeniedException(ACCESS_DENIED);
     }
 
     @GetMapping(GET_ALL_USERS_URL)

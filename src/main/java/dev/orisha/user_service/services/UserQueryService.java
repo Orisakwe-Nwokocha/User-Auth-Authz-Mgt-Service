@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service for executing complex queries for {@link User} entities in the database.
@@ -37,6 +38,15 @@ public class UserQueryService extends QueryService<User> {
     public UserQueryService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<UserDTO> findOneByCriteria(UserCriteria criteria) {
+        LOG.debug("find one by criteria : {}", criteria);
+        final Specification<User> specification = createSpecification(criteria);
+        UserDTO dto = userMapper.toDto(userRepository.findOne(specification)
+                                                     .orElse(null));
+        return Optional.ofNullable(dto);
     }
 
     @Transactional(readOnly = true)

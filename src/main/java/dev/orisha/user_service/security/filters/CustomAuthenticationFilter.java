@@ -32,7 +32,7 @@ import java.util.Collection;
 
 import static dev.orisha.user_service.controllers.constants.ApplicationUrls.BASE_AUTH_URL;
 import static dev.orisha.user_service.controllers.constants.ApplicationUrls.LOGIN_URL;
-import static dev.orisha.user_service.handlers.constants.ErrorConstants.AUTHENTICATION_ERROR_MESSAGE;
+import static dev.orisha.user_service.exceptions.constants.ErrorConstants.AUTHENTICATION_ERROR_MESSAGE;
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.HOURS;

@@ -1,6 +1,6 @@
 package dev.orisha.user_service.security.data.models;
 
-import dev.orisha.user_service.data.models.User;
+import dev.orisha.user_service.dto.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,9 +9,9 @@ import java.util.Collection;
 
 public class SecureUser implements UserDetails {
 
-    private final User user;
+    private final UserDTO user;
 
-    public SecureUser(final User user) {
+    public SecureUser(final UserDTO user) {
         this.user = user;
     }
 

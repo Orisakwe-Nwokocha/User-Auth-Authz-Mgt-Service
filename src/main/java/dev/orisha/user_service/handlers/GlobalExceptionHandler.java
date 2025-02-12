@@ -18,7 +18,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 
-import static dev.orisha.user_service.handlers.constants.ErrorConstants.*;
+import static dev.orisha.user_service.exceptions.constants.ErrorConstants.*;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.time.LocalDateTime.now;
 import static org.springframework.http.HttpStatus.*;

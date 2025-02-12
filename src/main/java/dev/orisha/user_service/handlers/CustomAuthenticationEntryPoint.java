@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static dev.orisha.user_service.handlers.constants.ErrorConstants.*;
+import static dev.orisha.user_service.exceptions.constants.ErrorConstants.*;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;

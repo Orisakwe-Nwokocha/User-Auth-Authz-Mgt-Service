@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 //import static dev.orisha.user_service.handlers.constants.ErrorConstants.NO_STATIC_RESOURCE_PATH_FOUND;
-import static dev.orisha.user_service.handlers.constants.ErrorConstants.NO_STATIC_RESOURCE_PATH_FOUND;
+import static dev.orisha.user_service.exceptions.constants.ErrorConstants.NO_STATIC_RESOURCE_PATH_FOUND;
 import static dev.orisha.user_service.security.utils.SecurityUtils.JWT_PREFIX;
 import static dev.orisha.user_service.security.utils.SecurityUtils.PUBLIC_ENDPOINTS;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;

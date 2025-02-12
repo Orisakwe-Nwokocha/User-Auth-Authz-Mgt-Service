@@ -28,9 +28,7 @@ public class UserDTO {
     @JsonSerialize(using = CustomEmptyStringSerializer.class)
     private String password;
 
-//    private Set<Authority> authorities;
-
-    private List<Authority> userAuthorities;
+    private List<Authority> authorities;
 
     private Instant dateRegistered;
 

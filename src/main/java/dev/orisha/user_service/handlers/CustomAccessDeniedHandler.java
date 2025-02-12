@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static dev.orisha.user_service.handlers.constants.ErrorConstants.*;
+import static dev.orisha.user_service.exceptions.constants.ErrorConstants.*;
 import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
