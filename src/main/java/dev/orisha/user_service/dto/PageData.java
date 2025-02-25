@@ -13,8 +13,8 @@ public class PageData<T> {
 
     private int currentPage;
     private int pageSize;
-    private long totalElements;
     private int totalPages;
+    private long totalElements;
     private List<T> content;
 
 }
