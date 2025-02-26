@@ -22,9 +22,9 @@ import java.util.Optional;
 
 /**
  * Service for executing complex queries for {@link User} entities in the database.
- * The main input is a {@link dev.orisha.user_service.services.criteria.UserCriteria UserCriteria} which gets converted to {@link Specification},
+ * The main input is a {@link UserCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link Page} of {@link dev.orisha.user_service.dto.UserDTO UserDTO} which fulfills the criteria.
+ * It returns a {@link Page} of {@link UserDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)

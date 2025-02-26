@@ -20,6 +20,7 @@ public class Todo {
      * TODO: add swagger for easy api documentation
      * TODO: path does not exist 404: Done
      * TODO: implement criteria and filters for optimized querying
+     * TODO: HttpMessageNotReadableException
 
      *
      *

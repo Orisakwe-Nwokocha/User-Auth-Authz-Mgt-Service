@@ -2,7 +2,6 @@ package dev.orisha.user_service.services;
 
 import dev.orisha.user_service.data.models.User;
 import dev.orisha.user_service.dto.PageData;
-import dev.orisha.user_service.exceptions.ResourceNotFoundException;
 import dev.orisha.user_service.factory.RequestFactory;
 import dev.orisha.user_service.mappers.UserMapper;
 import dev.orisha.user_service.data.repositories.UserRepository;
@@ -74,12 +73,9 @@ public class UserServiceImpl implements UserService {
     public PageData<UserDTO> getAllUsers(Pageable pageable) {
         log.info("Fetching all users with pageable: {}", pageable);
         Page<UserDTO> userDTOsPage = userQueryService.findByCriteria(null, pageable);
-        if (userDTOsPage != null) {
-            PageData<UserDTO> pageData = RequestFactory.createPageData(userDTOsPage);
-            log.info("Found users {}", pageData);
-            return pageData;
-        }
-        throw new ResourceNotFoundException("Users not found");
+        PageData<UserDTO> pageData = RequestFactory.buildPageData(userDTOsPage);
+        log.info("Found users {}", pageData);
+        return pageData;
     }
 
 }

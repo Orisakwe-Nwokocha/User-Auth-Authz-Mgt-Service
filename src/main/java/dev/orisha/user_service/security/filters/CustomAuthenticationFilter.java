@@ -65,7 +65,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         try(InputStream inputStream = request.getInputStream()) {
             loginRequest = mapper.readValue(inputStream, LoginRequest.class);
             if (loginRequest == null || loginRequest.getEmail() == null || loginRequest.getPassword() == null) {
-                throw new AuthenticationCredentialsNotFoundException("Login details is null or empty: %s".formatted(loginRequest));
+                throw new AuthenticationCredentialsNotFoundException("Login details is null or empty: " + loginRequest);
             }
         } catch (Exception e) {
             log.error(AUTHENTICATION_ERROR_MESSAGE, e);

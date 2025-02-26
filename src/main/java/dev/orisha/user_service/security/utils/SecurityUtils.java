@@ -11,8 +11,9 @@ public class SecurityUtils {
     public static final String JWT_PREFIX = "Bearer ";
 
     public static final List<String> PUBLIC_ENDPOINTS = List.of(
-            "%s%s".formatted(BASE_AUTH_URL, REGISTER_URL),
-            "%s%s".formatted(BASE_AUTH_URL, LOGIN_URL)
+            BASE_AUTH_URL + REGISTER_URL,
+            BASE_AUTH_URL + LOGIN_URL,
+            "users/all"
 //                "/users/api/v1/auth/register",
 //                "/users/api/v1/auth/login"
     );

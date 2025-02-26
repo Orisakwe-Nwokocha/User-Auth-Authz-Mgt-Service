@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-//import static dev.orisha.user_service.handlers.constants.ErrorConstants.NO_STATIC_RESOURCE_PATH_FOUND;
 import static dev.orisha.user_service.exceptions.constants.ErrorConstants.NO_STATIC_RESOURCE_PATH_FOUND;
 import static dev.orisha.user_service.security.utils.SecurityUtils.JWT_PREFIX;
 import static dev.orisha.user_service.security.utils.SecurityUtils.PUBLIC_ENDPOINTS;
@@ -87,7 +86,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             }
         } else {
             log.info("Authorization header not provided for request: {}", requestPath);
-            validateRequestPath(requestPath, request.getMethod(), response);
+            if (!isRequestPathValid(requestPath, request.getMethod())) {
+                sendErrorResponse(requestPath, response);
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);
@@ -143,29 +145,31 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         response.getWriter().flush();
     }
 
-    private void validateRequestPath(String requestPath, String method, HttpServletResponse response) throws IOException {
+    private boolean isRequestPathValid(String requestPath, String method) {
         RequestMethod requestMethod = RequestMethod.valueOf(method);
         log.info("Validating request path: '{}' with request method: '{}'", requestPath, requestMethod);
         RequestMappingInfo mappingInfo = RequestMappingInfo.paths(requestPath).methods(requestMethod).build();
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
         Set<RequestMappingInfo> requestMappingInfos = handlerMethods.keySet();
 
-        boolean isRequestPathValid = requestMappingInfos.contains(mappingInfo);
-        if (!isRequestPathValid) {
-            String errorMessage = NO_STATIC_RESOURCE_PATH_FOUND.formatted(requestPath);
-            log.info(errorMessage);
+        return requestMappingInfos.contains(mappingInfo);
+    }
 
-            ErrorResponse errorResponse = new ErrorResponse();
-            errorResponse.setTimestamp(now());
-            errorResponse.setStatus(SC_NOT_FOUND);
-            errorResponse.setError(NOT_FOUND.getReasonPhrase());
-            errorResponse.setDetail(errorMessage);
-            errorResponse.setPath(requestPath);
+    private void sendErrorResponse(String requestPath, HttpServletResponse response) throws IOException {
+        String errorMessage = NO_STATIC_RESOURCE_PATH_FOUND.formatted(requestPath);
+        log.info(errorMessage);
 
-            response.setStatus(SC_NOT_FOUND);
-            response.setContentType(APPLICATION_JSON_VALUE);
-            response.getOutputStream().write(objectMapper.writeValueAsBytes(errorResponse));
-        }
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(now());
+        errorResponse.setStatus(SC_NOT_FOUND);
+        errorResponse.setError(NOT_FOUND.getReasonPhrase());
+        errorResponse.setDetail(errorMessage);
+        errorResponse.setPath(requestPath);
+
+        response.setStatus(SC_NOT_FOUND);
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.getOutputStream().write(objectMapper.writeValueAsBytes(errorResponse));
+        response.getOutputStream().flush();
     }
 
 }

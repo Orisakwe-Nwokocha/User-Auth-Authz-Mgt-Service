@@ -1,14 +1,15 @@
 package dev.orisha.user_service.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Setter
 @Getter
 @ToString(exclude = "content")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PageData<T> {
 
     private int currentPage;
