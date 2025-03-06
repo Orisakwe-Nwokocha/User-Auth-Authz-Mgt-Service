@@ -49,7 +49,6 @@ public class AuthServiceImpl implements AuthService {
         User newUser = createAndSaveUser(request);
         RegisterResponse response = modelMapper.map(newUser, RegisterResponse.class);
         response.setMessage("Successfully registered");
-        log.error("user {}", newUser);
         log.info("User successfully registered with authorities: {}", newUser.getAuthorities());
         return new ApiResponse<>(LocalDateTime.now(), true, response);
     }
