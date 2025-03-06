@@ -1,0 +1,49 @@
+{
+  "annotations": {
+    "changelogDate": "20250306115720"
+  },
+  "applications": "*",
+  "clientRootFolder": "UserService",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "url",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "category",
+      "fieldType": "Category",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTION,DRAMA,SCI_FI,ROMANCE,HORROR,STEP_MOM,COMEDY"
+    },
+    {
+      "fieldName": "timeCreated",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "timeUpdated",
+      "fieldType": "Instant"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "UserService",
+  "name": "Media",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "email",
+      "otherEntityName": "uploader",
+      "relationshipName": "uploader",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

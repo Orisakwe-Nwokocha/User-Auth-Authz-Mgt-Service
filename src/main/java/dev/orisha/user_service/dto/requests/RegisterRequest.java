@@ -1,5 +1,6 @@
 package dev.orisha.user_service.dto.requests;
 
+import dev.orisha.user_service.data.models.Age;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class RegisterRequest {
     private String lastName;
     private @NotNull @NotBlank String email;
     private @NotNull @NotBlank String password;
+    private Age age;
 
 }
 

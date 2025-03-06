@@ -50,4 +50,16 @@ public class User {
     @UpdateTimestamp
     private Instant dateUpdated;
 
+    @Transient
+//    @OneToOne
+    private Age age;
+
+    @Column(name = "age_id")
+    private Long ageId;
+
+
+    public void setAge(Age age) {
+        this.age = age;
+        this.ageId = age == null ? null : age.getId();
+    }
 }

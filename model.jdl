@@ -1,0 +1,44 @@
+enum Category {
+  ACTION, DRAMA, SCI_FI, ROMANCE, HORROR, STEP_MOM, COMEDY
+}
+
+enum Role {
+  USER, ADMIN
+}
+
+entity Media {
+  url String required,
+  description String,
+  category Category required,
+  timeCreated Instant,
+  timeUpdated Instant
+}
+
+entity Uploader {
+  firstName String,
+  lastName String,
+  email String required unique,
+  password String required,
+  dateRegistered Instant required,
+  dateUpdated Instant
+}
+
+entity Authority {
+  role Role required
+}
+
+relationship ManyToOne {
+  Media{uploader(email)} to Uploader
+  Authority{uploader} to Uploader
+}
+
+paginate * with pagination
+dto * with mapstruct
+service * with serviceImpl
+filter *
+
+// Uncomment if using Angular suffix
+// angularSuffix * with mySuffix
+
+// Uncomment if using Elasticsearch for search
+// search * with elasticsearch

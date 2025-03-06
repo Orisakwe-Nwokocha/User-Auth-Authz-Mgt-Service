@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20250306115722"
+  },
+  "applications": "*",
+  "clientRootFolder": "UserService",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "role",
+      "fieldType": "Role",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "USER,ADMIN"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "UserService",
+  "name": "Authority",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "uploader",
+      "relationshipName": "uploader",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

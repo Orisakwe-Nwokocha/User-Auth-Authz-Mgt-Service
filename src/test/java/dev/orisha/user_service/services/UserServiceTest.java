@@ -1,8 +1,14 @@
 package dev.orisha.user_service.services;
 
+import dev.orisha.user_service.data.models.Age;
+import dev.orisha.user_service.data.repositories.UserRepository;
 import dev.orisha.user_service.dto.PageData;
 import dev.orisha.user_service.dto.UserDTO;
+import dev.orisha.user_service.dto.requests.RegisterRequest;
 import dev.orisha.user_service.dto.requests.UserUpdateRequest;
+import dev.orisha.user_service.dto.responses.ApiResponse;
+import dev.orisha.user_service.dto.responses.RegisterResponse;
+import dev.orisha.user_service.security.services.AuthService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +28,9 @@ class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthService authService;
 
     @Test
     void getUserTest() {
@@ -71,6 +80,18 @@ class UserServiceTest {
         request.setFirstName("firstname");
         request.setAuthority(ADMIN);
         return request;
+    }
+
+    @Test
+    void registerUserTest() {
+        RegisterRequest request = new RegisterRequest();
+        request.setFirstName("firstname");
+        request.setPassword("password");
+        request.setEmail("emails");
+        request.setAge(new Age("132"));
+        ApiResponse<RegisterResponse> register = authService.register(request);
+        assertNotNull(register);
+        System.out.println(register);
     }
 
 }

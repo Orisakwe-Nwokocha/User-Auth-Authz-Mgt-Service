@@ -1,6 +1,8 @@
 package dev.orisha.user_service.security.services;
 
+import dev.orisha.user_service.data.models.Age;
 import dev.orisha.user_service.data.models.User;
+import dev.orisha.user_service.data.repositories.AgeRepository;
 import dev.orisha.user_service.data.repositories.UserRepository;
 import dev.orisha.user_service.dto.requests.RegisterRequest;
 import dev.orisha.user_service.dto.responses.ApiResponse;
@@ -31,6 +33,9 @@ public class AuthServiceImpl implements AuthService {
     private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     @Autowired
+    private AgeRepository ageRepository;
+
+    @Autowired
     public AuthServiceImpl(final UserRepository userRepository,
                            final ModelMapper modelMapper,
                            final PasswordEncoder passwordEncoder,
@@ -47,9 +52,10 @@ public class AuthServiceImpl implements AuthService {
         log.info("Registering new user");
         validateExistingEmail(request.getEmail());
         User newUser = createAndSaveUser(request);
+        System.out.println(newUser.getAge());
+        System.out.println(newUser);
         RegisterResponse response = modelMapper.map(newUser, RegisterResponse.class);
         response.setMessage("Successfully registered");
-        log.error("user {}", newUser);
         log.info("User successfully registered with authorities: {}", newUser.getAuthorities());
         return new ApiResponse<>(LocalDateTime.now(), true, response);
     }
@@ -90,6 +96,11 @@ public class AuthServiceImpl implements AuthService {
         newUser.setEmail(newUser.getEmail().toLowerCase());
         newUser.setAuthorities(new HashSet<>());*/
 
+        System.out.println(newUser.getAge());
+        System.out.println(newUser);
+        Age age = ageRepository.save(request.getAge());
+        newUser.setAge(age);
+        System.out.println(newUser);
         return userRepository.save(newUser);
     }
 
