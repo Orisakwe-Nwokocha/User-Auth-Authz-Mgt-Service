@@ -10,11 +10,10 @@
 	</parent>
 	<groupId>dev.orisha</groupId>
 	<artifactId>user-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<name>user-service</name>
 	<description>Orisha style user authentication and authorization microservice application</description>
 	<url>https://github.com/Orisakwe-Nwokocha/UserAuthenticationAuthorizationManagementMicroservice</url>
-	<packaging>jar</packaging>
 
 	<licenses>
 		<license>
