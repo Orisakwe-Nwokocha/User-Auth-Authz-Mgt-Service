@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.orisha.user_service.config.CustomEmptyStringSerializer;
 import dev.orisha.user_service.data.enums.Authority;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -41,13 +40,12 @@ public class User {
     @Enumerated(STRING)
     private Set<Authority> authorities;
 
-    @Setter(AccessLevel.NONE)
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant dateRegistered;
 
-    @Setter(AccessLevel.NONE)
     @UpdateTimestamp
+    @Column(insertable = false)
     private Instant dateUpdated;
 
     @Transient

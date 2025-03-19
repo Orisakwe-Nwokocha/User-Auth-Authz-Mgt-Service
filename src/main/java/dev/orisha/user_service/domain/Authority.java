@@ -3,6 +3,8 @@ package dev.orisha.user_service.domain;
 import dev.orisha.user_service.domain.enumeration.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 import lombok.Getter;
@@ -21,6 +23,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Authority implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id
